@@ -25,7 +25,11 @@ void main() {
     b = 1;
     for (int i = 2; i <= n; i++) {
         int result = a + b;
-        System.out.println(result);
+        if(result%3==0){
+            System.out.println("Fizz");
+        }else {
+            System.out.println(result);
+        }
         a = b;
         b = result;
     }
