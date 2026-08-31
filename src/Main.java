@@ -60,4 +60,46 @@ void main() {
         }
         System.out.println("Строка "+i+": "+Arrays.toString(arrChar[i])+". Букв: "+letter+", Цифр: "+digit+", Остальных символов: "+other);
     }
+
+    //Сложная
+    System.out.print("Введите размеры массива MxN. M: ");
+    int M = console.nextInt();
+    System.out.print("N: ");
+    int N = console.nextInt();
+
+    double[][] array = new double[M][N];
+    System.out.println("Заполните массив double[][].");
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            System.out.print("double["+i+"]["+j+"]:");
+            array[i][j] = console.nextDouble();
+        }
+    }
+    for (int i = 0; i < array.length; i++) {
+        double max = array[i][0];
+        int j = 1;
+        for (; j < array[i].length; j++) {
+            if(array[i][j] > max){
+                max = array[i][j];
+            }
+        }
+        System.out.println("Для строки "+i+" максимальное значение равно "+max+" с индексом ["+i+"]["+(j-1)+"].");
+    }
+    boolean isSym = true;
+    for (int i = 0; i < array.length; i++) {
+        for (int j = 0; j < i; j++) {
+            if(Math.abs(array[i][j]-array[j][i]) > 0.00001){
+                isSym = false;
+                break;
+            }
+        }
+        if(!isSym){
+            break;
+        }
+    }
+    if(isSym){
+        System.out.println("Матрица симметрична.");
+    }else{
+        System.out.println("Матрица не симметрична.");
+    }
 }
