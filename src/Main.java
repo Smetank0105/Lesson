@@ -1,59 +1,63 @@
 void main() {
-    //Чётная в диапазоне
+    //Простая
     Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
-        }
+    System.out.print("Введите N - размер массива: ");
+    int size = console.nextInt();
+    System.out.println("Заполните массив.");
+    double[] arr = new double[size];
+    for (int i = 0; i < size; i++) {
+        System.out.print("arr[" + i + "]: ");
+        arr[i] = console.nextDouble();
     }
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
+    double sum = 0;
+    for (double num : arr) {
+        sum += num;
     }
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
-            }
+    double avr = sum/size;
+
+    int count=0;
+    for(double num:arr){
+        if(num>avr){
             count++;
         }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
     }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+
+    System.out.println("Сумма: " + sum);
+    System.out.println("Среднее арифметическое: " + avr);
+    System.out.println("Кол-во элементов больше среднего: " + count);
+
+    //Средняя
+    System.out.print("Введите размеры массива MxN. M: ");
+    int row = console.nextInt();
+    System.out.print("N: ");
+    int col = console.nextInt();
+
+    char[][] arrChar = new char[row][col];
+    System.out.println("Заполните массив char[][].");
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            System.out.print("char["+i+"]["+j+"]:");
+            arrChar[i][j] = console.next().charAt(0);
+        }
+    }
+    int letter  = 0;
+    int digit = 0;
+    int other = 0;
+
+    for (int i = 0; i < arrChar.length; i++) {
+        for (int j = 0; j < arrChar[i].length; j++) {
+            char ch = arrChar[i][j];
+
+            if(Character.isLetter(ch)){
+                letter++;
+            }else if(Character.isDigit(ch)){
+                digit++;
+            }else{
+                other++;
+            }
+        }
+        System.out.println("Строка "+i+": "+Arrays.toString(arrChar[i])+". Букв: "+letter+", Цифр: "+digit+", Остальных символов: "+other);
+    }
 }
