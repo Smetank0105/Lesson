@@ -1,59 +1,124 @@
 void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
+    //1
+    Scanner scanner = new Scanner(System.in);
+    int n = 4;
+
+    Person[] people = new Person[n];
+
+    System.out.println("Введите 4 человека. Для каждого выберите тип:");
+    System.out.println("1 — Person, 2 — Student");
+    for (int i = 0; i < n; i++) {
+        System.out.print("Тип (" + (i + 1) + "): 1 — Person, 2 — Student > ");
+        int type = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Имя: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Возраст: ");
+        int age = scanner.nextInt();
+        scanner.nextLine();
+
+        if (type == 1) {
+            people[i] = new Person(name, age);
+        } else if (type == 2) {
+            System.out.print("Оценка (от 0 до 10): ");
+            double grade = scanner.nextDouble();
+            scanner.nextLine();
+
+            people[i] = new Student(name, age, grade);
+        } else {
+            System.err.println("Неправильный выбор типа! Пропускаем.");
+            people[i] = new Person("John Doe", 0);
+            continue;
         }
     }
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
+    System.out.println("\nИнформация о всех людях:");
+    for (Person p : people) {
+        p.displayInfo();
     }
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
-            }
-            count++;
-        }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
+
+    //2
+    BankAccount[] accounts = new BankAccount[] {
+            new SavingsAccount("Nick", 1000.0, 0.05),
+            new CheckingAccount("Mike", 800.0, 10.0),
+            new SavingsAccount("Sam", 2000.0, 0.03),
+            new CheckingAccount("Dean", 500.0, 5.0)
+    };
+
+    double totalBalance = 0.0;
+
+    for (BankAccount acc : accounts) {
+        totalBalance += acc.calculateYearlyReport();
+        System.out.println("Owner: "+acc.getOwner()+", Balance: "+acc.getBalance()+", After Year: "+acc.calculateYearlyReport());
     }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+    System.out.println();
+    System.out.println("Total forecasted balance after year: " + totalBalance);
+
+    //3
+    System.out.println("Введите количество фигур:");
+    n = Integer.parseInt(scanner.nextLine());
+
+    Shape[] shapes = new Shape[n];
+
+    for (int i = 0; i < n; i++) {
+        System.out.println("Введите тип фигуры (c - circle/r - rectangle), затем имя, затем параметры:");
+        String type = scanner.nextLine().trim().toLowerCase();
+        String name = scanner.nextLine().trim();
+
+        if (type.equals("c")) {
+            System.out.println("Введите радиус:");
+            double radius = Double.parseDouble(scanner.nextLine().trim());
+            shapes[i] = new Circle(name, radius);
+        } else if (type.equals("r")) {
+            System.out.println("Введите ширину:");
+            double width = Double.parseDouble(scanner.nextLine().trim());
+            System.out.println("Введите высоту:");
+            double height = Double.parseDouble(scanner.nextLine().trim());
+            shapes[i] = new Rectangle(name, width, height);
+        } else {
+            System.out.println("Неизвестный тип, используем квадрат как заглушку");
+            shapes[i] = new Rectangle(name, 0, 0);
+        }
+    }
+
+    for (Shape shape : shapes) {
+        shape.describe();
+    }
+
+    //4
+    ComparableStudent[] students = new ComparableStudent[5];
+
+    System.out.println("Введите 5 студентов (имя и средняя оценка, разделенные пробелом):");
+    for (int i = 0; i < 5; i++) {
+        System.out.print((i + 1) + ". ");
+        String line = scanner.nextLine().trim();
+        String[] parts = line.split(" ");
+        if (parts.length < 2) {
+            System.out.println("Ошибка ввода. Введите имя и оценку.");
+            i--;
+            continue;
+        }
+        String name = parts[0];
+        try {
+            double avgGrade = Double.parseDouble(parts[1]);
+            students[i] = new ComparableStudent(name, avgGrade);
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: средняя оценка должна быть числом.");
+            i--;
+            continue;
+        }
+    }
+
+    Arrays.sort(students);
+
+    System.out.println("\nСписок студентов, отсортированных по возрастанию средней оценки:");
+    for (ComparableStudent s : students) {
+        System.out.println(s);
+    }
+
+
+    scanner.close();
 }
