@@ -66,7 +66,6 @@ void main() {
     System.out.println("\nОбщая сумма выплат: "+totalPay);
 
     //4
-    //Scanner console = new Scanner(System.in);
     System.out.print("Введите количество фигур: ");
     int count = scanner.nextInt();
     scanner.nextLine();
