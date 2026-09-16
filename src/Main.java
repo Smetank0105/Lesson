@@ -1,59 +1,73 @@
 void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
+    //1
+    Animal[] animals = {
+            new Dog("Барсик"),
+            new Cat("Мурзик")
+    };
+
+    for (Animal animal : animals) {
+        animal.makeSound();
+        animal.sleep();
+    }
+
+    //2
+    Drawable[] drawings = new Drawable[2];
+
+    drawings[0] = new Circle(5.5);
+    drawings[1] = new TextLabel("Hello, World!");
+
+    for (Drawable d : drawings) {
+        d.draw();
+    }
+
+    //3
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.print("Введите количество сотрудников: ");
+    int n = scanner.nextInt();
+    scanner.nextLine();
+
+    Payable[] employees = new Payable[n];
+
+    for (int i = 0; i < n; i++) {
+        System.out.print("Введите имя сотрудника: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Введите базовый оклад: ");
+        double baseSalary = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Введите тип сотрудника (1 - Manager, 2 - Developer): ");
+        int type = scanner.nextInt();
+        scanner.nextLine();
+
+        Payable emp = null;
+        if (type == 1) {
+            emp = new Manager(name, baseSalary);
+        } else if (type == 2) {
+            emp = new Developer(name, baseSalary);
+        } else {
+            System.out.println("Неизвестный тип. Используем Developer по умолчанию.");
+            emp = new Developer(name, baseSalary);
+        }
+        employees[i] = emp;
+    }
+
+    double totalSalary = 0.0;
+    double maxBonusSalary = Double.MIN_VALUE;
+    String maxEmployeeName = "";
+
+    for (Payable emp : employees) {
+        double pay = emp.calculatePay();
+        totalSalary += pay;
+        System.out.println(((Employee)emp).getName()+": "+pay);
+
+        if (pay > maxBonusSalary) {
+            maxBonusSalary = pay;
+            maxEmployeeName = ((Employee) emp).getName();
         }
     }
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
-    }
-
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
-            }
-            count++;
-        }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
-    }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+    System.out.println("\nОбщая сумма выплат: "+totalSalary);
+    System.out.println("Наибольшая зарплата с бонусом у "+maxEmployeeName+": "+maxBonusSalary);
 }
