@@ -1,59 +1,118 @@
 void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
+    //1
+    ArrayList<String> shoppingList = new ArrayList<>();
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Введите названия товаров для списка покупок. Введите 'стоп', чтобы завершить ввод:");
+    while (true) {
+        System.out.print("Товар: ");
+        String item = scanner.nextLine().trim();
+        if (item.equalsIgnoreCase("стоп")) {
+            break;
+        }
+        if (!item.isEmpty()) {
+            shoppingList.add(item);
         }
     }
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
+    System.out.println("\nВаш текущий список покупок:");
+    if (shoppingList.isEmpty()) {
+        System.out.println("- Список пуст");
+    } else {
+        for (int i = 0; i < shoppingList.size(); i++) {
+            System.out.println((i + 1) + ". " + shoppingList.get(i));
         }
-        a = b;
-        b = result;
     }
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
-            }
-            count++;
+    if (!shoppingList.isEmpty()) {
+        System.out.print("\nВведите название товара для удаления: ");
+        String toRemove = scanner.nextLine().trim();
+        if (shoppingList.contains(toRemove)) {
+            shoppingList.remove(toRemove);
+            System.out.println("Товар \"" + toRemove + "\" удалён.");
+        } else {
+            System.out.println("Товар не найден");
         }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
+    } else {
+        System.out.println("Список покупок пуст. Удаление невозможно.");
     }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+
+    System.out.println("\nИтоговый список покупок:");
+    if (shoppingList.isEmpty()) {
+        System.out.println("- Список пуст");
+    } else {
+        for (String item : shoppingList) {
+            System.out.println("- " + item);
+        }
+    }
+    System.out.println("Размер списка: " + shoppingList.size());
+
+
+    //2
+    System.out.print("Введите количество слов N: ");
+    int n = scanner.nextInt();
+    scanner.nextLine();
+
+    ArrayList<String> list = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        System.out.print("Введите слово #" + (i + 1) + ": ");
+        String word = scanner.nextLine();
+        list.add(word);
+    }
+
+    HashSet<String> uniqueWords = new HashSet<>(list);
+
+    System.out.println("\nРазмер исходного списка слов: " + list.size());
+    System.out.println("Количество уникальных слов: " + uniqueWords.size());
+    System.out.println("\nУникальные слова:");
+    for (String word : uniqueWords) {
+        System.out.println(word);
+    }
+
+
+    //3
+    System.out.print("Введите предложение: ");
+    String str = scanner.nextLine();
+    String[] words = str.trim().split(" ");
+
+    Map<String, Integer> wordCountMap = new HashMap<>();
+    for (String word : words) {
+        if (wordCountMap.containsKey(word)) {
+            wordCountMap.put(word, wordCountMap.get(word) + 1);
+        } else {
+            wordCountMap.put(word, 1);
+        }
+    }
+
+    System.out.println("Таблица «слово — количество»:");
+    for (Map.Entry<String, Integer> entry : wordCountMap.entrySet()) {
+        System.out.println(entry.getKey() + " — " + entry.getValue());
+    }
+
+
+    scanner.close();
+
+    //4
+    List<Integer> numbers = new ArrayList<>();
+    for (int i = 1; i <= 10; i++) {
+        numbers.add(i);
+    }
+
+//    for (Integer number : numbers) {
+//        if (number % 2 == 0) {
+//            numbers.remove(number); //
+//        }
+//    }
+//
+//    System.out.println("Осталось: " + numbers);
+
+    Iterator<Integer> it = numbers.iterator();
+    while (it.hasNext()) {
+        Integer number = it.next();
+        if (number % 2 == 0) {
+            it.remove();
+        }
+    }
+
+    System.out.println("Осталось: " + numbers);
 }
