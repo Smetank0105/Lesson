@@ -1,59 +1,47 @@
 void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
-        }
+    //1
+    Path path = Paths.get("notes.txt");
+    try {
+        Files.write(path, "1. Матрица\n2. Интерстеллар\n3. Пятый элемент".getBytes(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
     }
+    String content = null;
+    try {
+        content = new String(Files.readAllBytes(path));
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    System.out.println(content);
+    try {
+        Files.write(path, "\n4. Довод".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    try {
+        content = new String(Files.readAllBytes(path));
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    System.out.println(content);
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
-    }
+    //2
+    byte[] byteArray = {1,2,3,4,5,6,7,8,9,10};
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
-            }
-            count++;
-        }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
+    try (FileOutputStream fos = new FileOutputStream("data.bin")) {
+        fos.write(byteArray);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
     }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+    try (FileInputStream fis = new FileInputStream("data.bin")) {
+        byte[] readBuffer = new byte[10];
+        int bytesRead = fis.read(readBuffer);
+        System.out.println("Размер файла: " + bytesRead + " байтов");
+
+        for (int i = 0; i < bytesRead; i++) {
+            System.out.println("Байт " + i + ": " + (int) readBuffer[i] + " ");
+        }
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
 }
