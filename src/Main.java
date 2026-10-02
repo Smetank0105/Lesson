@@ -1,59 +1,88 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
-        }
-    }
+    //1
+//    JFrame input = new JFrame();
+//    input.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//    input.setSize(300,200);
+//    input.setLayout(new GridLayout(4,2,10,10));
+//
+//    Random random = new Random();
+//
+//    input.add(new JLabel("От"));
+//    JTextField from = new JPasswordField();
+//    input.add(from);
+//    input.add(new JLabel("До"));
+//    JTextField to = new JPasswordField();
+//    input.add(to);
+//    JButton btn = new JButton("Generate");
+//    input.add(btn);
+//    JLabel result = new JLabel("");
+//    input.add(result);
+//
+//    btn.addActionListener(new ActionListener() {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//            String fromText = from.getText().trim();
+//            String toText = to.getText().trim();
+//
+//            try {
+//                int from = Integer.parseInt(fromText);
+//                int to = Integer.parseInt(toText);
+//
+//                if (from > to) {
+//                    result.setText("Ошибка: 'от' больше 'до'");
+//                    return;
+//                }
+//
+//                int randomNumber = random.nextInt(to - from + 1) + from;
+//                result.setText(String.valueOf(randomNumber));
+//            } catch (NumberFormatException ex) {
+//                result.setText("Ошибка: введите целые числа");
+//            }
+//        }
+//    });
+//    input.setVisible(true);
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
-    }
+    //2
+    int[] count = {0};
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
+    JFrame frame = new JFrame();
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLayout(new FlowLayout());
+    frame.setSize(300,200);
+
+    JLabel label = new JLabel("Кликов 0");
+    JButton clicker = new JButton("Клик");
+    JButton reset = new JButton("Сброс");
+    frame.add(label);
+    frame.add(clicker);
+    frame.add(reset);
+
+    clicker.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            count[0]++;
+            if (count[0] >= 10) {
+                label.setText("Хватит кликать!");
+                clicker.setEnabled(false);
+            } else {
+                label.setText("Кликов: " + count[0]);
             }
-            count++;
         }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
-    }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+    });
+
+    reset.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            count[0] = 0;
+            label.setText("Кликов: 0");
+            clicker.setEnabled(true);
+        }
+    });
+
+    frame.setVisible(true);
 }
