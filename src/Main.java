@@ -1,59 +1,85 @@
-void main() {
-    //Чётная в диапазоне
-    Scanner console = new Scanner(System.in);
-    System.out.print("Введите первое число: ");
-    int a = console.nextInt();
-    System.out.print("Введите второе число: ");
-    int b = console.nextInt();
-    System.out.println("Чётные в диапазоне от "+a+" до "+b+":");
-    for (int i = (a<b?a:b); i <= (a>b?a:b); i++) {
-        if(i%2==0){
-            System.out.print(i+" ");
-        }
-    }
+static int counter = 0;
 
-    //Числа Фибоначчи с условием
-    int n;
-    do{
-        System.out.print("\nВведите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    System.out.println("Последовательность Фиббоначи для числа "+n);
-    System.out.println(0);
-    System.out.println(1);
-    a = 0;
-    b = 1;
-    for (int i = 2; i <= n; i++) {
-        int result = a + b;
-        if(result%3==0){
-            System.out.println("Fizz");
-        }else {
-            System.out.println(result);
-        }
-        a = b;
-        b = result;
-    }
+void main() throws InterruptedException {
+    //1
+    Thread thread1 = new Thread(new MyThread());
+    thread1.setName("thread from class");
+    thread1.setPriority(Thread.MIN_PRIORITY);
 
-    //Проверка на простоту с подсётом
-    boolean isSimple;
-    int count = 0;
-    int sum =0;
-    do {
-        System.out.println("Введите число больше 1: ");
-        n = console.nextInt();
-    }while(n < 2);
-    for (int i = 2; i <= n; i++) {
-        isSimple = true;
-        for (int j = 2; j*j <= i; j++) {
-            if(i%j == 0){
-                isSimple = false;
-                break;
+    Thread thread2 = new Thread(() -> {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(Thread.currentThread().getName() + " приоритет: " + Thread.currentThread().getPriority());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-            count++;
         }
-        sum += (isSimple?i:0);
-        System.out.println("Число "+i+(isSimple?" простое.":" составное."));
+    });
+    thread2.setName("thread from lyambda");
+    thread2.setPriority(Thread.NORM_PRIORITY);
+
+    Thread thread3 = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            for (int i = 0; i < 5; i++) {
+                System.out.println(Thread.currentThread().getName() + " приоритет: " + Thread.currentThread().getPriority());
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    });
+    thread3.setName("thread from lyambda");
+    thread3.setPriority(Thread.MAX_PRIORITY);
+
+    thread1.start();
+    thread2.start();
+    thread3.start();
+
+    thread1.join();
+    thread2.join();
+    thread3.join();
+
+    System.out.println("THE END");
+
+    //2
+    int count = 0;
+    int min = 400000;
+    int max = 0;
+
+    for (int i = 0; i < 10; i++) {
+        Runnable runnable = () -> {
+            for (int j = 0; j < 100000; j++) {
+                counter++;
+            }
+        };
+
+        Thread thread4 = new Thread(runnable);
+        Thread thread5 = new Thread(runnable);
+        Thread thread6 = new Thread(runnable);
+        Thread thread7 = new Thread(runnable);
+
+
+        thread4.start();
+        thread5.start();
+        thread6.start();
+        thread7.start();
+
+        thread4.join();
+        thread5.join();
+        thread6.join();
+        thread7.join();
+
+        System.out.println(counter);
+        if (counter == 400000) count++;
+        if (min > counter) min = counter;
+        if (max < counter) max = counter;
+        counter = 0;
     }
-    System.out.println("Всего простых чисел было "+count+", а их сумма = "+sum);
-    console.close();
+    System.out.println("Count 400000 - " + count);
+    System.out.println("Min - " + min);
+    System.out.println("Max - " + max);
 }
